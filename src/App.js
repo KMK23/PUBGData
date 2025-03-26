@@ -10,7 +10,7 @@ import Stats from "./pages/Stats";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-const darkTheme = createTheme({
+const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
@@ -21,17 +21,19 @@ const darkTheme = createTheme({
     },
     background: {
       default: "#121212",
-      paper: "#1e1e1e",
+      paper: "#1a1a1a",
     },
   },
   typography: {
-    fontFamily: '"Noto Sans KR", "Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily:
+      "'Pretendard-Regular', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
           textTransform: "none",
+          borderRadius: "8px",
         },
       },
     },
@@ -41,7 +43,7 @@ const darkTheme = createTheme({
 function App() {
   return (
     <Provider store={store}>
-      <ThemeProvider theme={darkTheme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
           <div className="App">

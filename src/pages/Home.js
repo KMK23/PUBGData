@@ -120,6 +120,118 @@ const Home = () => {
     {
       id: "erangel",
       name: "에란겔",
+      image: "/images/maps/erangel.jpg",
+      description: "8x8km 크기의 러시아식 군사기지가 있는 섬",
+      features: [
+        "다양한 지형과 전략적 포인트",
+        "군사기지, 야스나야 폴리아나 등 인기 지역",
+        "해안가 보트 루트",
+        "도시/야외 전투 모두 가능",
+      ],
+      landmarks: [
+        "군사기지: 최고급 전리품",
+        "야스나야 폴리아나: 대규모 도시 전투",
+        "학교: 인기 초반 전투 지역",
+        "조지폴: 항구 도시",
+      ],
+    },
+    {
+      id: "miramar",
+      name: "미라마",
+      image: "/images/maps/miramar.jpg",
+      description: "8x8km 크기의 사막 맵으로, 멕시코 북부를 모티브로 제작",
+      features: [
+        "광활한 사막과 구릉지대",
+        "높은 지형을 이용한 저격전",
+        "오프로드 차량 활용",
+        "복잡한 도시 구조",
+      ],
+      landmarks: [
+        "페카도: 가장 큰 도시",
+        "로스 레오네스: 복잡한 도시 전투",
+        "임팔라: 중앙 주요 전투 지역",
+        "몬테 누에보: 높은 지형 전투",
+      ],
+    },
+    {
+      id: "sanhok",
+      name: "사녹",
+      image: "/images/maps/Sanhok.jpg",
+      description:
+        "4x4km 크기의 정글 맵으로, 동남아시아의 열대 환경을 모티브로 제작",
+      features: [
+        "정글과 열대 지형",
+        "빠른 전투와 높은 템포",
+        "복잡한 정글 지형",
+        "다양한 수송 수단",
+      ],
+      landmarks: [
+        "부트캠프: 군사 훈련장",
+        "파라다이스 리조트: 호화로운 리조트",
+        "사원: 전략적 포인트",
+        "해변: 보트 이동",
+      ],
+    },
+    {
+      id: "taego",
+      name: "태이고",
+      image: "/images/maps/taego.jpg",
+      description: "한국을 모티브로 한 8x8km 크기의 맵",
+      features: [
+        "한국의 시골 마을과 도시 재현",
+        "넓은 들판과 산악 지형",
+        "컴백 시스템 도입",
+        "자체 구조 시스템",
+      ],
+      landmarks: [
+        "태이고 시티: 현대적 도시 전투",
+        "호산: 전통 마을",
+        "공장: 산업단지 전투",
+      ],
+    },
+    {
+      id: "vikendi",
+      name: "비켄디",
+      image: "/images/maps/vikendi.jpg",
+      description:
+        "8x8km 크기의 설원 맵으로, 동유럽의 겨울 풍경을 모티브로 제작",
+      features: [
+        "설원과 얼음 환경",
+        "스키장과 리조트",
+        "동굴과 지하 시설",
+        "눈 위 전투",
+      ],
+      landmarks: [
+        "코스타나: 중앙 주요 도시",
+        "스키장: 높은 지형 전투",
+        "동굴: 은신과 이동",
+        "포베다: 항구 도시",
+      ],
+    },
+    {
+      id: "deston",
+      name: "데스턴",
+      image: "/images/maps/deston.jpg",
+      description: "8x8km 크기의 미래 도시 맵으로, 현대와 미래가 공존하는 환경",
+      features: [
+        "미래 도시와 자연의 조화",
+        "고층 빌딩과 슬럼가",
+        "하이테크 시설",
+        "다양한 수송 수단",
+      ],
+      landmarks: [
+        "리버랜드: 미래 도시 중심지",
+        "슬럼가: 도시 전투",
+        "하이테크 시설: 최신 장비",
+        "항구: 보트 이동",
+      ],
+    },
+  ];
+
+  const vehicleMaps = [
+    {
+      id: "erangel",
+      name: "에란겔",
       vehicleImage: "/images/maps/erangel-car.png",
     },
     {
@@ -542,134 +654,128 @@ const Home = () => {
                 >
                   맵 정보
                 </Typography>
-                <Grid container spacing={3} sx={{ mb: 6 }}>
+                <Grid container spacing={3}>
                   {maps.map((map) => (
-                    <Grid item xs={12} md={4} key={map.name}>
-                      <Paper
+                    <Grid item xs={12} sm={6} md={4} key={map.id}>
+                      <Card
+                        onClick={() => setSelectedMapForZoom(map)}
                         sx={{
-                          p: 2,
+                          cursor: "pointer",
                           height: "100%",
                           background:
-                            "linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%)",
+                            "linear-gradient(145deg, #2d2d2d 0%, #1a1a1a 100%)",
                           boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
                           borderRadius: "12px",
-                          cursor: "pointer",
                           transition: "transform 0.2s",
                           "&:hover": {
-                            transform: "scale(1.02)",
+                            transform: "translateY(-5px)",
                           },
                         }}
-                        onClick={() => {
-                          setSelectedMapForZoom(map.name);
-                          setSelectedMapForVehicle(map.name);
-                        }}
                       >
-                        <Box
-                          sx={{
-                            position: "relative",
-                            width: "100%",
-                            paddingTop: "56.25%",
-                            overflow: "hidden",
-                            borderRadius: "8px",
-                            mb: 2,
-                          }}
-                        >
-                          <img
-                            src={map.image}
-                            alt={map.name}
-                            style={{
-                              position: "absolute",
-                              top: 0,
-                              left: 0,
-                              width: "100%",
-                              height: "100%",
-                              objectFit: "cover",
-                            }}
-                          />
-                        </Box>
-                        <Typography
-                          variant="h6"
-                          sx={{ color: "#90caf9", textAlign: "center" }}
-                        >
-                          {map.name}
-                        </Typography>
-                      </Paper>
+                        <CardMedia
+                          component="img"
+                          height="200"
+                          image={map.image}
+                          alt={map.name}
+                        />
+                        <CardContent>
+                          <Typography
+                            gutterBottom
+                            variant="h6"
+                            component="h3"
+                            sx={{ color: "#90caf9" }}
+                          >
+                            {map.name}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            paragraph
+                          >
+                            {map.description}
+                          </Typography>
+                        </CardContent>
+                      </Card>
                     </Grid>
                   ))}
                 </Grid>
 
-                {/* 맵 상세 정보 */}
+                {/* 선택된 맵의 상세 정보 */}
                 {selectedMapForZoom && (
-                  <Box sx={{ mb: 6 }}>
-                    <Grid container spacing={3}>
-                      <Grid item xs={12} md={6}>
-                        <Paper
-                          sx={{
-                            p: 3,
-                            background:
-                              "linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%)",
-                            boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
-                            borderRadius: "12px",
-                          }}
-                        >
-                          <Box
+                  <Box
+                    sx={{
+                      mt: 4,
+                      display: "flex",
+                      gap: 3,
+                      flexDirection: { xs: "column", md: "row" },
+                    }}
+                  >
+                    <Box sx={{ flex: 1 }}>
+                      <Box
+                        component="img"
+                        src={selectedMapForZoom.image}
+                        alt={selectedMapForZoom.name}
+                        sx={{
+                          width: "100%",
+                          borderRadius: "8px",
+                          boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+                        }}
+                      />
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
+                      <Typography
+                        variant="h6"
+                        gutterBottom
+                        sx={{ color: "#90caf9" }}
+                      >
+                        {selectedMapForZoom.name} 상세 정보
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        sx={{ whiteSpace: "pre-line", color: "text.secondary" }}
+                      >
+                        {selectedMapForZoom.description}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        sx={{ color: "#90caf9", mt: 3, mb: 1 }}
+                      >
+                        주요 특징
+                      </Typography>
+                      <Box sx={{ mb: 3 }}>
+                        {selectedMapForZoom.features.map((feature, index) => (
+                          <Typography
+                            key={index}
+                            color="text.secondary"
                             sx={{
-                              position: "relative",
-                              width: "100%",
-                              paddingTop: "56.25%",
-                              overflow: "hidden",
-                              borderRadius: "8px",
-                              mb: 2,
+                              display: "flex",
+                              alignItems: "center",
+                              mb: 1,
                             }}
                           >
-                            <img
-                              src={`/images/maps/${selectedMapForZoom.toLowerCase()}.png`}
-                              alt={selectedMapForZoom}
-                              style={{
-                                position: "absolute",
-                                top: 0,
-                                left: 0,
-                                width: "100%",
-                                height: "100%",
-                                objectFit: "cover",
-                              }}
-                            />
-                          </Box>
+                            • {feature}
+                          </Typography>
+                        ))}
+                      </Box>
+                      <Typography variant="h6" sx={{ color: "#90caf9", mb: 1 }}>
+                        주요 랜드마크
+                      </Typography>
+                      <Box>
+                        {selectedMapForZoom.landmarks.map((landmark, index) => (
                           <Typography
-                            variant="h5"
-                            sx={{ color: "#90caf9", mb: 2 }}
+                            key={index}
+                            color="text.secondary"
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              mb: 1,
+                            }}
                           >
-                            {selectedMapForZoom} 맵 정보
+                            • {landmark}
                           </Typography>
-                          <Typography color="text.secondary" paragraph>
-                            {mapDetails[selectedMapForZoom].description}
-                          </Typography>
-                          <Typography
-                            variant="h6"
-                            sx={{ color: "#90caf9", mt: 3, mb: 1 }}
-                          >
-                            주요 특징
-                          </Typography>
-                          <Box sx={{ mb: 3 }}>
-                            {mapDetails[selectedMapForZoom].features.map(
-                              (feature, index) => (
-                                <Typography
-                                  key={index}
-                                  color="text.secondary"
-                                  sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    mb: 1,
-                                  }}
-                                >
-                                  {feature}
-                                </Typography>
-                              )
-                            )}
-                          </Box>
-                        </Paper>
-                      </Grid>
-                    </Grid>
+                        ))}
+                      </Box>
+                    </Box>
                   </Box>
                 )}
               </Paper>
@@ -959,7 +1065,7 @@ const Home = () => {
           </Grid>
         </Box>
 
-        {/* 맵 차량 위치 섹션 */}
+        {/* 맵별 차량 위치 섹션 */}
         <Box sx={{ mb: 8 }}>
           <Typography
             variant="h4"
@@ -970,7 +1076,7 @@ const Home = () => {
             맵별 차량 위치
           </Typography>
           <Grid container spacing={4}>
-            {maps.map((map) => (
+            {vehicleMaps.map((map) => (
               <Grid item xs={12} md={4} key={map.id}>
                 <Card
                   sx={{
@@ -1032,11 +1138,13 @@ const Home = () => {
                 gutterBottom
                 sx={{ color: "#90caf9", textAlign: "center", mb: 3 }}
               >
-                {maps.find((m) => m.id === selectedMap)?.name} 차량 위치
+                {vehicleMaps.find((m) => m.id === selectedMap)?.name} 차량 위치
               </Typography>
               <Box
                 component="img"
-                src={maps.find((m) => m.id === selectedMap)?.vehicleImage}
+                src={
+                  vehicleMaps.find((m) => m.id === selectedMap)?.vehicleImage
+                }
                 alt="차량 위치"
                 sx={{
                   width: "100%",
@@ -1124,7 +1232,7 @@ const Home = () => {
 
                   {selectedMap === "miramar" && (
                     <>
-                      <Grid item xs={12} sm={6} md={2}>
+                      <Grid item xs={12} sm={6} md={2.4}>
                         <Box
                           sx={{
                             p: 0.5,
@@ -1134,12 +1242,16 @@ const Home = () => {
                             color: "black",
                             fontWeight: "bold",
                             fontSize: "0.8rem",
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
                           }}
                         >
                           황금미라도 (100%)
                         </Box>
                       </Grid>
-                      <Grid item xs={12} sm={6} md={2}>
+                      <Grid item xs={12} sm={6} md={2.4}>
                         <Box
                           sx={{
                             p: 0.5,
@@ -1149,12 +1261,16 @@ const Home = () => {
                             color: "white",
                             fontWeight: "bold",
                             fontSize: "0.8rem",
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
                           }}
                         >
                           미라도 (100%)
                         </Box>
                       </Grid>
-                      <Grid item xs={12} sm={6} md={2}>
+                      <Grid item xs={12} sm={6} md={2.4}>
                         <Box
                           sx={{
                             p: 0.5,
@@ -1164,12 +1280,16 @@ const Home = () => {
                             color: "white",
                             fontWeight: "bold",
                             fontSize: "0.8rem",
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
                           }}
                         >
                           픽업트럭 (50%)
                         </Box>
                       </Grid>
-                      <Grid item xs={12} sm={6} md={2}>
+                      <Grid item xs={12} sm={6} md={2.4}>
                         <Box
                           sx={{
                             p: 0.5,
@@ -1179,12 +1299,16 @@ const Home = () => {
                             color: "black",
                             fontWeight: "bold",
                             fontSize: "0.8rem",
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
                           }}
                         >
                           탈것 (48%)
                         </Box>
                       </Grid>
-                      <Grid item xs={12} sm={6} md={2}>
+                      <Grid item xs={12} sm={6} md={2.4}>
                         <Box
                           sx={{
                             p: 0.5,
@@ -1194,6 +1318,10 @@ const Home = () => {
                             color: "white",
                             fontWeight: "bold",
                             fontSize: "0.8rem",
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
                           }}
                         >
                           보트 (100%)
