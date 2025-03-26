@@ -20,6 +20,9 @@ import {
   CircularProgress,
   useTheme,
   useMediaQuery,
+  Dialog,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import {
   Search as SearchIcon,
@@ -43,8 +46,10 @@ const Home = () => {
   );
   const [selectedPlatform, setSelectedPlatform] = useState("kakao");
   const [selectedGameMode, setSelectedGameMode] = useState("solo");
-  const [selectedMap, setSelectedMap] = useState("erangel");
+  const [selectedMap, setSelectedMap] = useState(null);
   const [selectedWeaponCategory, setSelectedWeaponCategory] = useState("ar");
+  const [selectedMapForZoom, setSelectedMapForZoom] = useState(null);
+  const [selectedMapForVehicle, setSelectedMapForVehicle] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -129,6 +134,103 @@ const Home = () => {
     },
   ];
 
+  const mapDetails = {
+    erangel: {
+      description: `에란겔은 PUBG의 첫 번째 맵으로, 8x8km 크기의 러시아식 군사기지가 있는 섬입니다.
+
+주요 특징
+• 다양한 지형과 전략적 포인트
+• 군사기지, 야스나야 폴리아나 등 인기 지역
+• 해안가 보트 루트
+• 도시/야외 전투 모두 가능
+
+주요 랜드마크
+• 군사기지: 최고급 전리품
+• 야스나야 폴리아나: 대규모 도시 전투
+• 학교: 인기 초반 전투 지역
+• 조지폴: 항구 도시`,
+    },
+    miramar: {
+      description: `미라마는 8x8km 크기의 사막 맵으로, 멕시코 북부를 모티브로 제작되었습니다.
+
+주요 특징
+• 광활한 사막과 구릉지대
+• 높은 지형을 이용한 저격전
+• 오프로드 차량 활용
+• 복잡한 도시 구조
+
+주요 랜드마크
+• 페카도: 가장 큰 도시
+• 로스 레오네스: 복잡한 도시 전투
+• 임팔라: 중앙 주요 전투 지역
+• 몬테 누에보: 높은 지형 전투`,
+    },
+    taego: {
+      description: `태이고는 한국을 모티브로 한 8x8km 크기의 맵입니다.
+
+주요 특징
+• 한국의 시골 마을과 도시 재현
+• 넓은 들판과 산악 지형
+• 컴백 시스템 도입
+• 자체 구조 시스템
+
+주요 랜드마크
+• 태이고 시티: 현대적 도시 전투
+• 호산: 전통 마을
+• 공장: 산업단지 전투`,
+    },
+    vikendi: {
+      description: `비켄디는 8x8km 크기의 설원 맵으로, 동유럽의 겨울 풍경을 모티브로 제작되었습니다.
+
+주요 특징
+• 설원과 얼음 환경
+• 스키장과 리조트
+• 동굴과 지하 시설
+• 눈 위 전투
+
+주요 랜드마크
+• 코스타나: 중앙 주요 도시
+• 스키장: 높은 지형 전투
+• 동굴: 은신과 이동
+• 포베다: 항구 도시`,
+    },
+    deston: {
+      description: `데스턴은 8x8km 크기의 미래 도시 맵으로, 현대와 미래가 공존하는 환경을 제공합니다.
+
+주요 특징
+• 미래 도시와 자연의 조화
+• 고층 빌딩과 슬럼가
+• 하이테크 시설
+• 다양한 수송 수단
+
+주요 랜드마크
+• 리버랜드: 미래 도시 중심지
+• 슬럼가: 도시 전투
+• 하이테크 시설: 최신 장비
+• 항구: 보트 이동`,
+    },
+    sanhok: {
+      description: `사녹은 4x4km 크기의 정글 맵으로, 동남아시아의 열대 환경을 모티브로 제작되었습니다.
+
+주요 특징
+• 정글과 열대 지형
+• 빠른 전투와 높은 템포
+• 복잡한 정글 지형
+• 다양한 수송 수단
+
+주요 랜드마크
+• 부트캠프: 군사 훈련장
+• 파라다이스 리조트: 호화로운 리조트
+• 사원: 전략적 포인트
+• 해변: 보트 이동`,
+    },
+  };
+
+  const handleMapClick = (mapName) => {
+    setSelectedMap(mapName);
+    setSelectedMapForZoom(mapName);
+  };
+
   React.useEffect(() => {
     // 현재 시즌 정보 가져오기
     dispatch(fetchCurrentSeason({ platform: "kakao" }));
@@ -176,16 +278,26 @@ const Home = () => {
               >
                 당신의 PUBG 전적을 한눈에 확인하세요
               </Typography>
-              <Button
-                component={Link}
-                to="/search"
-                variant="contained"
-                size="large"
-                startIcon={<SearchIcon />}
-                sx={{ mt: 2 }}
-              >
-                전적 검색하기
-              </Button>
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <Button
+                  component={Link}
+                  to="/search"
+                  variant="contained"
+                  size="large"
+                  startIcon={<SearchIcon />}
+                >
+                  전적 검색하기
+                </Button>
+                <Button
+                  component={Link}
+                  to="/stats"
+                  variant="contained"
+                  size="large"
+                  startIcon={<TrendingUp />}
+                >
+                  내 전체 통계 확인하기
+                </Button>
+              </Box>
             </Grid>
             <Grid item xs={12} md={6}>
               <Box
@@ -204,6 +316,152 @@ const Home = () => {
       </Box>
 
       <Container maxWidth="lg">
+        {/* 랭크 시스템 표 */}
+        <Box sx={{ mb: 8 }}>
+          <Typography
+            variant="h4"
+            component="h2"
+            gutterBottom
+            sx={{ color: "#90caf9", mb: 4, textAlign: "center" }}
+          >
+            배틀그라운드 랭크 시스템
+          </Typography>
+          <Grid container spacing={2}>
+            {[
+              {
+                title: "브론즈",
+                color: "#63432e",
+                scoreColor: "#8b4513",
+                badge: "/images/badges/bronze.webp",
+                tiers: [
+                  { tier: "V", range: "1000 ~ 1099" },
+                  { tier: "IV", range: "1100 ~ 1199" },
+                  { tier: "III", range: "1200 ~ 1299" },
+                  { tier: "II", range: "1300 ~ 1399" },
+                  { tier: "I", range: "1400 ~ 1499" },
+                ],
+              },
+              {
+                title: "실버",
+                color: "#6d7277",
+                scoreColor: "#808080",
+                badge: "/images/badges/silver.webp",
+                tiers: [
+                  { tier: "V", range: "1500 ~ 1599" },
+                  { tier: "IV", range: "1600 ~ 1699" },
+                  { tier: "III", range: "1700 ~ 1799" },
+                  { tier: "II", range: "1800 ~ 1899" },
+                  { tier: "I", range: "1900 ~ 1999" },
+                ],
+              },
+              {
+                title: "골드",
+                color: "#cdcfd3",
+                scoreColor: "#daa520",
+                badge: "/images/badges/gold.webp",
+                tiers: [
+                  { tier: "V", range: "2000 ~ 2099" },
+                  { tier: "IV", range: "2100 ~ 2199" },
+                  { tier: "III", range: "2200 ~ 2299" },
+                  { tier: "II", range: "2300 ~ 2399" },
+                  { tier: "I", range: "2400 ~ 2499" },
+                ],
+              },
+              {
+                title: "플래티넘",
+                color: "#6c8a9d",
+                scoreColor: "#4682b4",
+                badge: "/images/badges/platinum.webp",
+                tiers: [
+                  { tier: "V", range: "2500 ~ 2599" },
+                  { tier: "IV", range: "2600 ~ 2699" },
+                  { tier: "III", range: "2700 ~ 2799" },
+                  { tier: "II", range: "2800 ~ 2899" },
+                  { tier: "I", range: "2900 ~ 2999" },
+                ],
+              },
+              {
+                title: "다이아몬드",
+                color: "#454864",
+                scoreColor: "#483d8b",
+                badge: "/images/badges/diamond.webp",
+                tiers: [
+                  { tier: "V", range: "3000 ~ 3099" },
+                  { tier: "IV", range: "3100 ~ 3199" },
+                  { tier: "III", range: "3200 ~ 3299" },
+                  { tier: "II", range: "3300 ~ 3399" },
+                  { tier: "I", range: "3400 ~ 3499" },
+                ],
+              },
+              {
+                title: "마스터",
+                color: "#c29d49",
+                scoreColor: "#b8860b",
+                badge: "/images/badges/master.webp",
+                tiers: [{ tier: "", range: "3499 RP 초과" }],
+              },
+            ].map((rank) => (
+              <Grid item xs={12} md={4} key={rank.title}>
+                <Paper sx={{ p: 2, bgcolor: rank.color, borderRadius: "12px" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      mb: 2,
+                      gap: 2,
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src={rank.badge}
+                      alt={rank.title}
+                      sx={{ width: 40, height: 40 }}
+                    />
+                    <Typography
+                      variant="h6"
+                      sx={{ color: "white", textAlign: "center" }}
+                    >
+                      {rank.title}
+                    </Typography>
+                  </Box>
+                  {rank.tiers.map((tier) => (
+                    <Box
+                      key={tier.tier}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        mb: 1,
+                        p: 1,
+                        borderRadius: "8px",
+                        bgcolor: rank.scoreColor,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          color: "#ffffff",
+                          fontWeight: "bold",
+                          fontSize: "1.1rem",
+                        }}
+                      >
+                        {rank.title} {tier.tier}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: "#ffd700",
+                          fontWeight: "bold",
+                          fontSize: "1.1rem",
+                        }}
+                      >
+                        {tier.range}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+
         {/* 주요 기능 */}
         <Box sx={{ mb: 8 }}>
           <Typography
@@ -284,103 +542,136 @@ const Home = () => {
                 >
                   맵 정보
                 </Typography>
-                <Grid container spacing={3}>
-                  {[
-                    {
-                      id: "erangel",
-                      name: "에란겔",
-                      image: "/images/maps/erangel.jpg",
-                      description:
-                        "클래식한 전장, 다양한 지형과 전술적 기회가 있는 8x8 맵",
-                      features: "도시, 산악, 해안가 등 다양한 지형",
-                    },
-                    {
-                      id: "miramar",
-                      name: "미라마",
-                      image: "/images/maps/miramar.jpg",
-                      description: "사막 지형의 8x8 맵, 장거리 전투에 적합",
-                      features: "사막, 도시, 산악 지형",
-                    },
-                    {
-                      id: "sanhok",
-                      name: "사녹",
-                      image: "/images/maps/Sanhok.jpg",
-                      description:
-                        "정글과 열대 지형의 4x4 맵, 빠른 전투가 특징",
-                      features: "정글, 해변, 도시",
-                    },
-                    {
-                      id: "vikendi",
-                      name: "비켄디",
-                      image: "/images/maps/vikendi.jpg",
-                      description:
-                        "눈과 얼음이 있는 6x6 맵, 다양한 전술적 선택지",
-                      features: "설원, 도시, 산악",
-                    },
-                    {
-                      id: "taego",
-                      name: "태이고",
-                      image: "/images/maps/taego.jpg",
-                      description:
-                        "한국을 모티브로 한 8x8 맵, 다양한 전투 환경",
-                      features: "도시, 농촌, 산악",
-                    },
-                    {
-                      id: "deston",
-                      name: "데스턴",
-                      image: "/images/maps/deston.jpg",
-                      description: "미래 도시와 자연이 공존하는 8x8 맵",
-                      features: "미래 도시, 습지, 산악",
-                    },
-                  ].map((map) => (
-                    <Grid item xs={12} sm={6} md={4} key={map.id}>
-                      <Card
+                <Grid container spacing={3} sx={{ mb: 6 }}>
+                  {maps.map((map) => (
+                    <Grid item xs={12} md={4} key={map.name}>
+                      <Paper
                         sx={{
+                          p: 2,
                           height: "100%",
                           background:
-                            "linear-gradient(145deg, #2d2d2d 0%, #1a1a1a 100%)",
+                            "linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%)",
                           boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
                           borderRadius: "12px",
+                          cursor: "pointer",
                           transition: "transform 0.2s",
                           "&:hover": {
-                            transform: "translateY(-5px)",
+                            transform: "scale(1.02)",
                           },
                         }}
+                        onClick={() => {
+                          setSelectedMapForZoom(map.name);
+                          setSelectedMapForVehicle(map.name);
+                        }}
                       >
-                        <CardMedia
-                          component="img"
-                          height="200"
-                          image={map.image}
-                          alt={map.name}
-                        />
-                        <CardContent>
-                          <Typography
-                            gutterBottom
-                            variant="h6"
-                            component="h3"
-                            sx={{ color: "#90caf9" }}
-                          >
-                            {map.name}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            paragraph
-                          >
-                            {map.description}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            sx={{ fontStyle: "italic" }}
-                          >
-                            {map.features}
-                          </Typography>
-                        </CardContent>
-                      </Card>
+                        <Box
+                          sx={{
+                            position: "relative",
+                            width: "100%",
+                            paddingTop: "56.25%",
+                            overflow: "hidden",
+                            borderRadius: "8px",
+                            mb: 2,
+                          }}
+                        >
+                          <img
+                            src={map.image}
+                            alt={map.name}
+                            style={{
+                              position: "absolute",
+                              top: 0,
+                              left: 0,
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                            }}
+                          />
+                        </Box>
+                        <Typography
+                          variant="h6"
+                          sx={{ color: "#90caf9", textAlign: "center" }}
+                        >
+                          {map.name}
+                        </Typography>
+                      </Paper>
                     </Grid>
                   ))}
                 </Grid>
+
+                {/* 맵 상세 정보 */}
+                {selectedMapForZoom && (
+                  <Box sx={{ mb: 6 }}>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12} md={6}>
+                        <Paper
+                          sx={{
+                            p: 3,
+                            background:
+                              "linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%)",
+                            boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+                            borderRadius: "12px",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              position: "relative",
+                              width: "100%",
+                              paddingTop: "56.25%",
+                              overflow: "hidden",
+                              borderRadius: "8px",
+                              mb: 2,
+                            }}
+                          >
+                            <img
+                              src={`/images/maps/${selectedMapForZoom.toLowerCase()}.png`}
+                              alt={selectedMapForZoom}
+                              style={{
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                              }}
+                            />
+                          </Box>
+                          <Typography
+                            variant="h5"
+                            sx={{ color: "#90caf9", mb: 2 }}
+                          >
+                            {selectedMapForZoom} 맵 정보
+                          </Typography>
+                          <Typography color="text.secondary" paragraph>
+                            {mapDetails[selectedMapForZoom].description}
+                          </Typography>
+                          <Typography
+                            variant="h6"
+                            sx={{ color: "#90caf9", mt: 3, mb: 1 }}
+                          >
+                            주요 특징
+                          </Typography>
+                          <Box sx={{ mb: 3 }}>
+                            {mapDetails[selectedMapForZoom].features.map(
+                              (feature, index) => (
+                                <Typography
+                                  key={index}
+                                  color="text.secondary"
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    mb: 1,
+                                  }}
+                                >
+                                  {feature}
+                                </Typography>
+                              )
+                            )}
+                          </Box>
+                        </Paper>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                )}
               </Paper>
             </Grid>
 
@@ -964,135 +1255,6 @@ const Home = () => {
               </Box>
             </Box>
           )}
-        </Box>
-
-        {/* 리더보드 */}
-        <Box sx={{ mb: 8 }}>
-          <Typography
-            variant="h4"
-            component="h2"
-            gutterBottom
-            sx={{ color: "#90caf9", mb: 4, textAlign: "center" }}
-          >
-            솔로 모드 랭킹
-          </Typography>
-          <Paper
-            sx={{
-              p: 3,
-              background: "linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%)",
-              boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
-              borderRadius: "12px",
-            }}
-          >
-            {/* 플랫폼과 게임 모드 선택 */}
-            <div className="flex gap-4 mb-6">
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  플랫폼
-                </label>
-                <select
-                  value={selectedPlatform}
-                  onChange={(e) => setSelectedPlatform(e.target.value)}
-                  className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="kakao">카카오</option>
-                  <option value="steam">스팀</option>
-                </select>
-              </div>
-              <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  게임 모드
-                </label>
-                <select
-                  value={selectedGameMode}
-                  onChange={(e) => setSelectedGameMode(e.target.value)}
-                  className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="solo">솔로</option>
-                  <option value="duo">듀오</option>
-                  <option value="squad">스쿼드</option>
-                </select>
-              </div>
-            </div>
-
-            {loading ? (
-              <Box sx={{ display: "flex", justifyContent: "center", p: 3 }}>
-                <CircularProgress />
-              </Box>
-            ) : error ? (
-              <Typography color="text.secondary" textAlign="center">
-                {error}
-              </Typography>
-            ) : leaderboard?.data ? (
-              <Box>
-                <Typography
-                  variant="subtitle1"
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  플랫폼: {leaderboard.data.attributes.shardId}
-                </Typography>
-                <Typography
-                  variant="subtitle1"
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  게임 모드: {leaderboard.data.attributes.gameMode}
-                </Typography>
-                <Typography
-                  variant="subtitle1"
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  시즌: {leaderboard.data.attributes.seasonId}
-                </Typography>
-                {leaderboard.data.relationships?.players?.data?.length > 0 ? (
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            순위
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            닉네임
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            점수
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {leaderboard.data.relationships.players.data.map(
-                          (player, index) => (
-                            <tr key={player.id} className="hover:bg-gray-50">
-                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {index + 1}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {player.attributes?.name || "알 수 없음"}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {player.attributes?.stats?.rankPoints || "0"}
-                              </td>
-                            </tr>
-                          )
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  <Typography color="text.secondary" textAlign="center">
-                    현재 리더보드 데이터가 없습니다.
-                  </Typography>
-                )}
-              </Box>
-            ) : (
-              <Typography color="text.secondary" textAlign="center">
-                리더보드 데이터를 불러오는 중...
-              </Typography>
-            )}
-          </Paper>
         </Box>
       </Container>
     </Box>
